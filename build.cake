@@ -517,7 +517,6 @@ Task("BuildForNuget")
         };
 
         msbuildSettings.BinaryLogger = binaryLogger;
-        msbuildSettings.ArgumentCustomization = args => args.Append("/nowarn:VSX1000");
         binaryLogger.FileName = $"{artifactStagingDirectory}/win-{configuration}.binlog";
 
         MSBuild("./Xamarin.Forms.sln", msbuildSettings);
