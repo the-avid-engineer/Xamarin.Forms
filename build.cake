@@ -473,7 +473,6 @@ Task("_NuGetPack")
         NuGetPack(nugetFilePaths, nuGetPackSettings);
     });
 
-
 Task("Restore")
     .Description("Restore target on Xamarin.Forms.sln")
     .Does(() =>
@@ -573,17 +572,36 @@ Task("Android100")
     .Description("Builds Monodroid10.0 targets")
     .Does(() =>
     {
-            MSBuild("Xamarin.Forms.sln",
-                    GetMSBuildSettings()
-                        .WithRestore()
-                        .WithProperty("AndroidTargetFrameworks", "MonoAndroid90;MonoAndroid10.0"));
+        MSBuild("Xamarin.Forms.sln",
+                GetMSBuildSettings()
+                    .WithRestore()
+                    .WithProperty("AndroidTargetFrameworks", "MonoAndroid90;MonoAndroid10.0"));
     });
 
 Task("VSMAC")
     .Description("Builds projects necessary so solution compiles on VSMAC")
+    .IsDependentOn("BuildTasks")
     .Does(() =>
     {
-        StartProcess("open", new ProcessSettings{ Arguments = "Xamarin.Forms.sln" });
+        StartVisualStudio();
+    });
+
+Task("cg-android")
+    .Description("Builds Android Control Gallery and open VS")
+    .IsDependentOn("BuildTasks")
+    .Does(() => 
+    {
+        MSBuild("./Xamarin.Forms.ControlGallery.Android/Xamarin.Forms.ControlGallery.Android.csproj", GetMSBuildSettings().WithRestore());
+        StartVisualStudio();
+    });
+
+Task("cg-ios")
+    .Description("Builds iOS Control Gallery and open VS")
+    .IsDependentOn("BuildTasks")
+    .Does(() =>
+    {   
+        MSBuild("./Xamarin.Forms.ControlGallery.iOS/Xamarin.Forms.ControlGallery.iOS.csproj", GetMSBuildSettings().WithRestore());
+        StartVisualStudio();
     });
 
 /*
@@ -627,6 +645,13 @@ Task("Default")
 
 RunTarget(target);
 
+void StartVisualStudio(string sln = "Xamarin.Forms.sln")
+{
+    if(IsRunningOnWindows())
+         StartProcess("start", new ProcessSettings{ Arguments = "Xamarin.Forms.sln" });
+    else
+         StartProcess("open", new ProcessSettings{ Arguments = "Xamarin.Forms.sln" });
+}
 
 MSBuildSettings GetMSBuildSettings()
 {
