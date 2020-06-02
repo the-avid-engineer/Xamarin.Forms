@@ -206,6 +206,7 @@ stages:
           provisionatorPath : 'build/provisioning/provisioning.csx'
           buildForVS2017: false
           buildConfiguration: $(DefaultBuildConfiguration)
+          MSBuildArguments_cg_android: $(MSBuildArguments_cg_android)
 
   - stage: android_2017
     displayName: Build Android 2017
