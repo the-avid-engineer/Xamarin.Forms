@@ -49,8 +49,10 @@ bool isCIBuild = !String.IsNullOrWhiteSpace(agentName);
 string artifactStagingDirectory = Argument("Build_ArtifactStagingDirectory", (string)null) ?? EnvironmentVariable("Build.ArtifactStagingDirectory") ?? EnvironmentVariable("Build_ArtifactStagingDirectory") ?? ".";
 var ANDROID_HOME = EnvironmentVariable("ANDROID_HOME") ??
     (IsRunningOnWindows () ? "C:\\Program Files (x86)\\Android\\android-sdk\\" : "");
-
-string[] androidSdkManagerInstalls = new [] { "platforms;android-28", "platforms;android-29", "build-tools;29.0.3"};
+string MSBuildArguments = EnvironmentVariable("MSBuildArguments", "");
+string androidSdks = EnvironmentVariable("AndroidSDKS", "platforms;android-28,platforms;android-29,build-tools;29.0.3");
+Information("AndroidSDKS: {0}", androidSdks);
+string[] androidSdkManagerInstalls = androidSDK.Split(',');
 
 (string name, string location)[] windowsSdksInstalls = new (string name, string location)[]
 {
@@ -666,7 +668,7 @@ MSBuildSettings GetMSBuildSettings()
         buildSettings = buildSettings.WithProperty("XamarinFormsVersion", XamarinFormsVersion);
     }
     
-    buildSettings.ArgumentCustomization = args => args.Append("/nowarn:VSX1000");
+    buildSettings.ArgumentCustomization = args => args.Append($"/nowarn:VSX1000 {MSBuildArguments}");
     return buildSettings;
 }
 
