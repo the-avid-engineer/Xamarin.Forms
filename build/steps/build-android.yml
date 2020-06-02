@@ -99,7 +99,7 @@ jobs:
         inputs:
           targetType: 'filePath'
           filePath: 'build.sh'
-          arguments: --target cg-android --ANDROID_RENDERERS=$(renderers) --buildForVS2017=$(buildForVS2017) --configuration=${{ parameters.buildConfiguration }} --MSBuildArguments='/t:"Rebuild;SignAndroidPackage" /bl:$(Build.ArtifactStagingDirectory)/android-$(renderers)-2017_$(buildForVS2017).binlog'
+          arguments: --target cg-android --ANDROID_RENDERERS=$(renderers) --buildForVS2017=$(buildForVS2017) --configuration=${{ parameters.buildConfiguration }} --MSBuildArguments='/t:"Rebuild;SignAndroidPackage" /bl:$(Build.ArtifactStagingDirectory)/android-$(renderers)-2017_$(buildForVS2017).binlog $(MSBuildArguments_cg-android)'
 
       - task: CopyFiles@2
         displayName: 'Copy $(renderers)'
