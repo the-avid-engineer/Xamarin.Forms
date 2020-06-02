@@ -110,10 +110,10 @@ if(String.IsNullOrWhiteSpace(ANDROID_API_SDKS))
 }
 else{
 
+	var androidSDK = AndroidSdk();
 	foreach(var sdk in ANDROID_API_SDKS.Split(','))
 	{
 		Console.WriteLine("Installing SDK: {0}", sdk);
-		AndroidSdk()
-			.SdkManagerPackage (sdk);
+		androidSDK = androidSDK.SdkManagerPackage (sdk);
 	}
 }
