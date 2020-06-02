@@ -94,6 +94,7 @@ jobs:
           restoreSolution:  ${{ parameters.slnPath }}
           feedsToUse: config
           nugetConfigPath: 'DevopsNuget.config'
+          buildProperties: ${{ parameters.MSBuildArguments_cg_android }}
 
       - task: MSBuild@1
         displayName: 'Build ${{ parameters.buildTaskPath  }}'
