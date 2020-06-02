@@ -52,7 +52,7 @@ var ANDROID_HOME = EnvironmentVariable("ANDROID_HOME") ??
 string MSBuildArguments = EnvironmentVariable("MSBuildArguments", "");
 string androidSdks = EnvironmentVariable("AndroidSDKS", "platforms;android-28,platforms;android-29,build-tools;29.0.3");
 Information("AndroidSDKS: {0}", androidSdks);
-string[] androidSdkManagerInstalls = androidSDK.Split(',');
+string[] androidSdkManagerInstalls = androidSdks.Split(',');
 
 (string name, string location)[] windowsSdksInstalls = new (string name, string location)[]
 {
@@ -242,22 +242,34 @@ Task("provision-androidsdk")
             try{
                 AcceptLicenses (androidSdkSettings);
             }
-            catch{}
+            catch(Exception exc)
+            {
+                Information("AcceptLicenses: {0}", exc);
+            }
 
             try{
                 AndroidSdkManagerUpdateAll (androidSdkSettings);
             }
-            catch{}
+            catch(Exception exc)
+            {
+                Information("AndroidSdkManagerUpdateAll: {0}", exc);
+            }
             
             try{
                 AcceptLicenses (androidSdkSettings);
             }
-            catch{}
+            catch(Exception exc)
+            {
+                Information("AcceptLicenses: {0}", exc);
+            }
 
             try{
                 AndroidSdkManagerInstall (androidSdkManagerInstalls, androidSdkSettings);
             }
-            catch{}
+            catch(Exception exc)
+            {
+                Information("AndroidSdkManagerInstall: {0}", exc);
+            }
         }
 
         if (!IsRunningOnWindows ()) {
