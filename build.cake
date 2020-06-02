@@ -742,10 +742,11 @@ bool IsXcodeVersionOver(string version)
     return true;
 }
 
-async System.Threading.Tasks.Task ResolveUrl (string url)
+async System.Threading.Tasks.Task<string> ResolveUrl (string url)
 {
+	System.Net.Http.HttpClient client = new System.Net.Http.HttpClient (new System.Net.Http.HttpClientHandler { AllowAutoRedirect = true });
     using (var response = await client.GetAsync (url, System.Net.Http.HttpCompletionOption.ResponseHeadersRead)) {
         response.EnsureSuccessStatusCode ();
-        Item(response.RequestMessage.RequestUri.ToString());
+        return response.RequestMessage.RequestUri.ToString();
     }
 }
