@@ -57,7 +57,7 @@ string MSBuildArguments;
 if(buildForVS2017)
     MSBuildArguments = String.Empty;
 else
-    MSBuildArguments = $"{MSBuildArgumentsENV} {MSBuildArgumentsARGS}"
+    MSBuildArguments = $"{MSBuildArgumentsENV} {MSBuildArgumentsARGS}";
     
 Information("MSBuildArguments: {0}", MSBuildArguments);
 
