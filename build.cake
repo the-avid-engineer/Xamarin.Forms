@@ -290,12 +290,28 @@ Task("provision-androidsdk")
 
         if (!IsRunningOnWindows ()) {
             if(!String.IsNullOrWhiteSpace(androidSDK))
-                await Boots (androidSDK);
+            {
+                try{
+                    await Boots (androidSDK);
+                }
+                catch{
+                    var tryAgain = await ResolveUrl(androidSDK);
+                    await Boots (tryAgain);
+                }
+            }
             else
                 await Boots (Product.XamarinAndroid, releaseChannel);
         }
         else if(!String.IsNullOrWhiteSpace(androidSDK))
-            await Boots(androidSDK);
+        {
+            try{
+                await Boots (androidSDK);
+            }
+            catch{
+                var tryAgain = await ResolveUrl(androidSDK);
+                await Boots (tryAgain);
+            }
+        }
     });
 
 Task("provision-monosdk")
@@ -724,4 +740,12 @@ bool IsXcodeVersionOver(string version)
     }
 
     return true;
+}
+
+async System.Threading.Tasks.Task ResolveUrl (string url)
+{
+    using (var response = await client.GetAsync (url, System.Net.Http.HttpCompletionOption.ResponseHeadersRead)) {
+        response.EnsureSuccessStatusCode ();
+        Item(response.RequestMessage.RequestUri.ToString());
+    }
 }
