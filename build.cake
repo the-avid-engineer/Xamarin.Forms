@@ -288,8 +288,23 @@ Task("provision-androidsdk")
             }
         }
 
-        if (!IsRunningOnWindows ()) {
-            if(!String.IsNullOrWhiteSpace(androidSDK))
+        try
+        {
+            if (!IsRunningOnWindows ()) {
+                if(!String.IsNullOrWhiteSpace(androidSDK))
+                {
+                    try{
+                        await Boots (androidSDK);
+                    }
+                    catch{
+                        var tryAgain = await ResolveUrl(androidSDK);
+                        await Boots (tryAgain);
+                    }
+                }
+                else
+                    await Boots (Product.XamarinAndroid, releaseChannel);
+            }
+            else if(!String.IsNullOrWhiteSpace(androidSDK))
             {
                 try{
                     await Boots (androidSDK);
@@ -298,19 +313,11 @@ Task("provision-androidsdk")
                     var tryAgain = await ResolveUrl(androidSDK);
                     await Boots (tryAgain);
                 }
-            }
-            else
-                await Boots (Product.XamarinAndroid, releaseChannel);
+            } 
         }
-        else if(!String.IsNullOrWhiteSpace(androidSDK))
+        catch(Exception exc)
         {
-            try{
-                await Boots (androidSDK);
-            }
-            catch{
-                var tryAgain = await ResolveUrl(androidSDK);
-                await Boots (tryAgain);
-            }
+            Information("Xamarin Android SDK Install Failed: {0}", exc);
         }
     });
 
