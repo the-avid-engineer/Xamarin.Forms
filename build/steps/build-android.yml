@@ -115,7 +115,7 @@ jobs:
         inputs:
           solution: ${{ parameters.androidProjectPath }}
           configuration: ${{ parameters.buildConfiguration }}
-          msbuildArguments: '/p:RestoreConfigFile="DevopsNuget.config" /t:"Restore;Rebuild;SignAndroidPackage" /p:ANDROID_RENDERERS="$(renderers)" /bl:$(Build.ArtifactStagingDirectory)/android-$(renderers)-2017_$(buildForVS2017).binlog ${{ parameters.MSBuildArguments_cg_android }}' 
+          msbuildArguments: '/p:RestoreConfigFile="DevopsNuget.config" /t:"Rebuild;SignAndroidPackage" /p:ANDROID_RENDERERS="$(renderers)" /bl:$(Build.ArtifactStagingDirectory)/android-$(renderers)-2017_$(buildForVS2017).binlog ${{ parameters.MSBuildArguments_cg_android }}' 
 
       - task: CopyFiles@2
         displayName: 'Copy $(renderers)'
