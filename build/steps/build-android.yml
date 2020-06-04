@@ -43,13 +43,6 @@ jobs:
       - checkout: self
         clean: true
 
-      - task: xamops.azdevex.provisionator-task.provisionator@1
-        displayName: 'Provisionator'
-        condition: and(eq(variables['provisioning'], 'true'), eq(variables['buildForVS2017'], 'false'))
-        inputs:
-          provisioning_script: ${{ parameters.provisionatorPath }}
-          provisioning_extra_args: ${{ parameters.provisionator.extraArguments }}
-
       - task: Bash@3
         displayName: 'Cake Provision'
         condition: or(eq(variables['provisioningCake'], 'true'), eq(variables['buildForVS2017'], 'true'))
@@ -57,6 +50,13 @@ jobs:
           targetType: 'filePath'
           filePath: 'build.sh'
           arguments: --target provision --TeamProject="$(System.TeamProject)" --buildForVS2017=$(buildForVS2017)
+
+      - task: xamops.azdevex.provisionator-task.provisionator@1
+        displayName: 'Provisionator'
+        condition: and(eq(variables['provisioning'], 'true'), eq(variables['buildForVS2017'], 'false'))
+        inputs:
+          provisioning_script: ${{ parameters.provisionatorPath }}
+          provisioning_extra_args: ${{ parameters.provisionator.extraArguments }}
 
       - task: UseDotNet@2
         displayName: 'Install .net core $(DOTNET_VERSION)'
