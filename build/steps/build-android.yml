@@ -100,14 +100,13 @@ jobs:
         inputs:
           solution: ${{ parameters.buildTaskPath }}
           configuration: ${{ parameters.buildConfiguration }}
-          msbuildArguments: '/p:RestoreConfigFile="DevopsNuget.config" /t:"Restore;Build" /p:ANDROID_RENDERERS="$(renderers)" ${{ parameters.MSBuildArguments_cg_android }}' 
 
       - task: MSBuild@1
         displayName: 'Build Control Gallery Android $(renderers)'
         inputs:
           solution: ${{ parameters.androidProjectPath }}
           configuration: ${{ parameters.buildConfiguration }}
-          msbuildArguments: '/p:RestoreConfigFile="DevopsNuget.config" /t:"Restore;Rebuild;SignAndroidPackage" /p:ANDROID_RENDERERS="$(renderers)" /bl:$(Build.ArtifactStagingDirectory)/android-$(renderers)-2017_$(buildForVS2017).binlog ${{ parameters.MSBuildArguments_cg_android }}' 
+          msbuildArguments: '/t:"Rebuild;SignAndroidPackage" /p:ANDROID_RENDERERS="$(renderers)" /bl:$(Build.ArtifactStagingDirectory)/android-$(renderers)-2017_$(buildForVS2017).binlog ${{ parameters.MSBuildArguments_cg_android }}' 
 
       - task: CopyFiles@2
         displayName: 'Copy $(renderers)'
