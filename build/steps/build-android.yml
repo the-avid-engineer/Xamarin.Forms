@@ -97,6 +97,7 @@ jobs:
 
       - task: MSBuild@1
         displayName: 'Build ${{ parameters.buildTaskPath  }}'
+        condition: eq(variables['System.TeamProject'], 'DevDiv')
         inputs:
           solution: ${{ parameters.buildTaskPath }}
           configuration: ${{ parameters.buildConfiguration }}
