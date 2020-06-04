@@ -208,20 +208,17 @@ stages:
           buildConfiguration: $(DefaultBuildConfiguration)
           MSBuildArguments_cg_android: $(MSBuildArguments_cg_android)
 
-  # - stage: android_2017
-  #   displayName: Build Android 2017
-  #   condition: eq(variables['System.TeamProject'], 'devdiv')
-  #   ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-  #     dependsOn: windows
-  #   ${{ if eq(variables['System.TeamProject'], 'public') }}:
-  #     dependsOn: []
-  #   jobs:
-  #     - template: build/steps/build-android.yml
-  #       parameters:
-  #         vmImage: 'macOS-10.14'
-  #         provisionatorPath : 'build/provisioning/provisioning.csx'
-  #         buildForVS2017: true
-  #         buildConfiguration: $(DefaultBuildConfiguration)
+  - stage: android_2017
+    displayName: Build Android 2017
+    condition: eq(variables['System.TeamProject'], 'devdiv')
+    dependsOn: windows
+    jobs:
+      - template: build/steps/build-android.yml
+        parameters:
+          vmImage: 'macOS-10.14'
+          provisionatorPath : 'build/provisioning/provisioning.csx'
+          buildForVS2017: true
+          buildConfiguration: $(DefaultBuildConfiguration)
 
   - stage: build_osx
     displayName: Build OSX
@@ -249,32 +246,30 @@ stages:
         steps:
           - template: build/steps/build-osx.yml
 
-  # - stage: build_osx_2017
-  #   displayName: Build OSX 2017
-  #   ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
-  #     dependsOn: windows
-  #   ${{ if eq(variables['System.TeamProject'], 'public') }}:
-  #     dependsOn: []
-  #   jobs:
-  #     - job: osx
-  #       workspace:
-  #         clean: all
-  #       displayName: OSX Phase 2017
-  #       pool:
-  #         name:  $(osx2017VmPool)
-  #         vmImage: 'macOS-10.14'
-  #         demands:
-  #           - sh
-  #           - Xamarin.iOS
-  #       variables:
-  #         provisionator.osxPath : 'build/provisioning/provisioning.csx'
-  #         buildConfiguration: $(DefaultBuildConfiguration)
-  #         slnPath: $(SolutionFile)
-  #         iOSCertSecureFileName: 'Xamarin Forms iOS Certificate.p12'
-  #         iOSProvisioningSecureFileName: 'Xamarin Forms iOS Provisioning.mobileprovision'
-  #         buildForVS2017: 'true'
-  #       steps:
-  #         - template: build/steps/build-osx.yml
+  - stage: build_osx_2017
+    displayName: Build OSX 2017
+    condition: eq(variables['System.TeamProject'], 'devdiv')
+    dependsOn: windows
+    jobs:
+      - job: osx
+        workspace:
+          clean: all
+        displayName: OSX Phase 2017
+        pool:
+          name:  $(osx2017VmPool)
+          vmImage: 'macOS-10.14'
+          demands:
+            - sh
+            - Xamarin.iOS
+        variables:
+          provisionator.osxPath : 'build/provisioning/provisioning.csx'
+          buildConfiguration: $(DefaultBuildConfiguration)
+          slnPath: $(SolutionFile)
+          iOSCertSecureFileName: 'Xamarin Forms iOS Certificate.p12'
+          iOSProvisioningSecureFileName: 'Xamarin Forms iOS Provisioning.mobileprovision'
+          buildForVS2017: 'true'
+        steps:
+          - template: build/steps/build-osx.yml
 
   # only sign using the private server
   - ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
