@@ -79,7 +79,7 @@ jobs:
         condition: eq(variables['System.TeamProject'], 'DevDiv')
         inputs:
           artifactName: 'nuget'
-          downloadPath: 'Nuget'
+          downloadPath: '$(Build.ArtifactsDirectory)'
 
       - bash: |
           echo "##vso[task.setvariable variable=NUGET_RESTORE_MSBUILD_ARGS]${{ parameters.MSBuildArguments_cg_android }}"
@@ -92,7 +92,8 @@ jobs:
       - task: NuGetCommand@2
         displayName: 'NuGet restore ${{ parameters.slnPath }}'
         inputs:
-          restoreSolution:  ${{ parameters.slnPath }}
+          command: restore
+          restoreSolution: 'Xamarin.Forms.sln'
           feedsToUse: config
           nugetConfigPath: 'DevopsNuget.config'
 
