@@ -288,36 +288,17 @@ Task("provision-androidsdk")
             }
         }
 
-        try
-        {
-            if (!IsRunningOnWindows ()) {
-                if(!String.IsNullOrWhiteSpace(androidSDK))
-                {
-                    try{
-                        await Boots (androidSDK);
-                    }
-                    catch{
-                        var tryAgain = await ResolveUrl(androidSDK);
-                        await Boots (tryAgain);
-                    }
-                }
-                else
-                    await Boots (Product.XamarinAndroid, releaseChannel);
-            }
-            else if(!String.IsNullOrWhiteSpace(androidSDK))
+        if (!IsRunningOnWindows ()) {
+            if(!String.IsNullOrWhiteSpace(androidSDK))
             {
-                try{
-                    await Boots (androidSDK);
-                }
-                catch{
-                    var tryAgain = await ResolveUrl(androidSDK);
-                    await Boots (tryAgain);
-                }
-            } 
+                await Boots (androidSDK);
+            }
+            else
+                await Boots (Product.XamarinAndroid, releaseChannel);
         }
-        catch(Exception exc)
+        else if(!String.IsNullOrWhiteSpace(androidSDK))
         {
-            Information("Xamarin Android SDK Install Failed: {0}", exc);
+            await Boots (androidSDK);
         }
     });
 
@@ -747,13 +728,4 @@ bool IsXcodeVersionOver(string version)
     }
 
     return true;
-}
-
-async System.Threading.Tasks.Task<string> ResolveUrl (string url)
-{
-	System.Net.Http.HttpClient client = new System.Net.Http.HttpClient (new System.Net.Http.HttpClientHandler { AllowAutoRedirect = true });
-    using (var response = await client.GetAsync (url, System.Net.Http.HttpCompletionOption.ResponseHeadersRead)) {
-        response.EnsureSuccessStatusCode ();
-        return response.RequestMessage.RequestUri.ToString();
-    }
 }
