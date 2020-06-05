@@ -74,12 +74,12 @@ namespace Xamarin.Forms.Core.UnitTests
 		public void HorizontalGridWithSpan987654ShouldReturnGridItemsLayout()
 		{
 			var converter = new ItemsLayoutTypeConverter();
-			var result = converter.ConvertFromInvariantString("HorizontalGrid,98654");
+			var result = converter.ConvertFromInvariantString("HorizontalGrid,987654");
 
 			Assert.IsInstanceOf<GridItemsLayout>(result);
 			var gridItemsLayout = (GridItemsLayout)result;
 			Assert.AreEqual(ItemsLayoutOrientation.Horizontal, gridItemsLayout.Orientation);
-			Assert.AreEqual(98654, gridItemsLayout.Span);
+			Assert.AreEqual(987654, gridItemsLayout.Span);
 		}
 
 		[Test]
@@ -106,6 +106,13 @@ namespace Xamarin.Forms.Core.UnitTests
 		{
 			var converter = new ItemsLayoutTypeConverter();
 			Assert.Throws<ArgumentException>(() => converter.ConvertFromInvariantString("VerticalGrid, 0"));
+		}
+
+		[Test]
+		public void VerticalGridWithNegativeSpanShouldShouldThrowFormatException()
+		{
+			var converter = new ItemsLayoutTypeConverter();
+			Assert.Throws<FormatException>(() => converter.ConvertFromInvariantString("VerticalGrid, -3"));
 		}
 
 		[Test]
@@ -165,7 +172,7 @@ namespace Xamarin.Forms.Core.UnitTests
 		}
 
 		[Test]
-		public void VerticalGridWithArgumentShouldShouldThrowInvalidOperationException()
+		public void VerticalListWithArgumentShouldShouldThrowInvalidOperationException()
 		{
 			var converter = new ItemsLayoutTypeConverter();
 			Assert.Throws<InvalidOperationException>(() => converter.ConvertFromInvariantString("VerticalList, 2"));
@@ -176,6 +183,27 @@ namespace Xamarin.Forms.Core.UnitTests
 		{
 			var converter = new ItemsLayoutTypeConverter();
 			Assert.Throws<InvalidOperationException>(() => converter.ConvertFromInvariantString(string.Empty));
+		}
+
+		[Test]
+		public void VerticalListWithPrecedingWhitespaceShouldThrowInvalidOperationException()
+		{
+			var converter = new ItemsLayoutTypeConverter();
+			Assert.Throws<InvalidOperationException>(() => converter.ConvertFromInvariantString(" VerticalList"));
+		}
+
+		[Test]
+		public void VerticalListWithFollowingWhitespaceShouldThrowInvalidOperationException()
+		{
+			var converter = new ItemsLayoutTypeConverter();
+			Assert.Throws<InvalidOperationException>(() => converter.ConvertFromInvariantString("VerticalList "));
+		}
+
+		[Test]
+		public void WhitespaceStringShouldThrowInvalidOperationException()
+		{
+			var converter = new ItemsLayoutTypeConverter();
+			Assert.Throws<InvalidOperationException>(() => converter.ConvertFromInvariantString(" "));
 		}
 
 		[Test]

@@ -12,7 +12,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" LineBreakMode="WordWrap" Text="Page should display 2 collection view with horizontal and vertical grid layouts"/>
+        <Label Grid.Row="0" LineBreakMode="WordWrap" Text="Page should display 2 collection views with horizontal and vertical grid layouts"/>
 
         <CollectionView Grid.Row="1" ItemsSource="{Binding Animals}" ItemsLayout="HorizontalGrid, 2" BackgroundColor="Yellow">
             <CollectionView.ItemTemplate>
