@@ -101,8 +101,8 @@ jobs:
         displayName: 'Copy Files to: $(System.DefaultWorkingDirectory)'
         condition: eq(variables['System.TeamProject'], 'DevDiv')
         inputs:
-          SourceFolder: 'Nuget/nuget/${{ parameters.buildConfiguration }}'
-          TargetFolder: 'Nuget'
+          SourceFolder: '$(Build.ArtifactsDirectory)/nuget/$(buildConfiguration)'
+          TargetFolder: '$(System.DefaultWorkingDirectory)/Nuget'
 
       - task: MSBuild@1
         displayName: 'Build ${{ parameters.buildTaskPath  }}'
