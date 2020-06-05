@@ -249,8 +249,10 @@ stages:
 
   - stage: build_osx_2017
     displayName: Build OSX 2017
-    condition: eq(variables['System.TeamProject'], 'devdiv')
-    dependsOn: windows
+    ${{ if eq(variables['System.TeamProject'], 'devdiv') }}:
+      dependsOn: windows
+    ${{ if eq(variables['System.TeamProject'], 'public') }}:
+      dependsOn: []
     jobs:
       - job: osx
         workspace:
